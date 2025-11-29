@@ -1,0 +1,9 @@
+Django
+requests
+beautifulsoup4
+dateparser
+huggingface-hub
+celery
+redis
+python-dotenv
+openai

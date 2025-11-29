@@ -1,0 +1,53 @@
+To use the Hugging Face Serverless Inference API, you need a Hugging Face account and an access token. You can then make requests using an HTTP client (like requests in Python or fetch in JavaScript) or the dedicated huggingface_hub Python library. 
+Prerequisites
+Create a Hugging Face Account: Sign up for a free account on the Hugging Face website.
+Generate an Access Token: Go to your Settings > Access Tokens page and create a new token. You'll need this token to authenticate your requests. 
+Methods to Use the API
+You can interact with the API using client libraries or raw HTTP requests. 
+1. Using the Python huggingface_hub library
+The huggingface_hub library provides an InferenceClient that simplifies interactions. 
+Installation:
+bash
+pip install huggingface-hub
+Use code with caution.
+
+Usage (Text Generation Example):
+python
+from huggingface_hub import InferenceClient
+import os
+
+# Set your token as an environment variable (recommended)
+# os.environ["HF_TOKEN"] = "YOUR_HF_TOKEN"
+
+# Initialize the client (it will automatically use the HF_TOKEN env var)
+client = InferenceClient()
+
+# Define the model ID
+API_URL = "HuggingFaceTB/SmolLM3-3B-hf" # Or any other model ID from the Hub
+
+# Define the payload (input data and parameters)
+payload = {
+    "inputs": "A HTTP POST request is used to ",
+    "parameters": {"temperature": 0.8, "max_new_tokens": 50, "seed": 42},
+}
+
+# Make the request
+response = client.text_generation(model=API_URL, **payload)
+print(response)
+Use code with caution.
+
+The client handles authentication and request formatting automatically. 
+2. Using Raw HTTP Requests (Python Example with requests)
+For a general HTTP client approach, you can use the requests library. 
+Installation:
+bash
+pip install requests
+Use code with caution.
+
+Usage:
+Hugging Face website provides Python code using the requests library to query the Serverless Inference API, including setting up the API URL, headers with authentication, and a function to send a POST request with the payload. 
+Key Considerations
+Authenticate requests using your API token.
+Initial requests for a model might require retries as the serverless API loads models on demand.
+Include the model ID in your request, as the API uses the model card to determine task and parameters.
+Parameters depend on the specific model and task; refer to the model card or the Hugging Face website for details. 

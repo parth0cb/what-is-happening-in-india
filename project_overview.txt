@@ -1,0 +1,49 @@
+an App named "What is happening in India" that scrapes and summarizes latest news in India in last specified time. (limit not allowed over 2 hours.)
+
+summary will be done using language model. I will use my hugging face inference api.
+if there is issue in api, let user know that the language model is currently unavailable. in that case, let user set up their own language model. tell user that it is recommended to use a small language model, since the task is trivial and token-heavy.
+
+parse method:
+```
+    resp = requests.get('https://www.thehindu.com/latest-news/')
+    soup = BeautifulSoup(resp.text, 'html.parser')
+
+    articles = soup.select('ul.timeline-with-img li .element')
+    now = datetime.now(timezone.utc).astimezone()
+
+    for article in articles:
+
+        time_div = article.select_one('.news-time.time')
+        if not time_div or not time_div.has_attr('data-published'):
+            continue
+
+        published_time = dateparser.parse(time_div['data-published'])
+        if now - published_time > timedelta(minutes=lookback_minutes):
+            break
+
+        article_title = article.select_one('h3.title a')
+        if not article_title:
+            continue
+        article_url = article_title['href']
+
+        article_resp = requests.get(article_url)
+        article_soup = BeautifulSoup(article_resp.text, 'html.parser')
+        paragraphs = article_soup.find_all('p')
+        full_text = "\n".join(p.get_text().strip() for p in paragraphs if p.get_text().strip())
+
+        if not full_text:
+            continue
+```
+
+summary quality instructions: user will mention lookback minutes, and also if each summary should be in one sentence or in one paragraph. keep one sentence as default. the summary itself should not mention the date unless the news is date specific. The summary should summarize the article but should not mention the article itself.
+
+Never on website, or in the summaries, mention the source or link of article.
+
+This scraping and summarizing will be a long process. so make sure it is not blocking.
+While the process is going on, update the loading message with what is happening. "scraping news", "summarizing 3/22", etc.
+
+Design:
+Use css files. not bootstrap.
+there must be dark theme toggle.
+website must be responsive for mobile screen.
+Do not use transform. Do not use gradient background. These are cheap tricks.

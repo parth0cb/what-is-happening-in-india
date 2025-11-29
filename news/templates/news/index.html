@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Happening in India</title>
+    <link rel="stylesheet" href="{% static 'news/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>What is Happening in India</h1>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </header>
+        
+        <main>
+            <section class="controls">
+                <div class="form-group">
+                    <label for="lookback-minutes">Lookback period (minutes):</label>
+                    <input type="number" id="lookback-minutes" min="1" max="120" value="60">
+                </div>
+                
+                <div class="form-group">
+                    <label for="summary-type">Summary type:</label>
+                    <select id="summary-type">
+                        <option value="sentence">One sentence</option>
+                        <option value="paragraph">One paragraph</option>
+                    </select>
+                </div>
+                
+                  <button id="get-news" class="btn-primary">Stop</button>
+             </section>
+
+             <div id="tokens-info" class="tokens-info hidden"></div>
+
+             <section id="loading" class="loading hidden">
+                <div class="loading-message" id="loading-message">Initializing...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </section>
+            
+            <section id="error" class="error hidden">
+                <div class="error-message" id="error-message"></div>
+            </section>
+            
+            <section id="results" class="results hidden">
+                <div id="summaries-container"></div>
+            </section>
+            
+            <section id="summarizer-warning" class="warning hidden">
+                <p>Language model not configured. Set these environment variables to enable summarization:</p>
+                <p><strong>LLM_API_URL</strong>: Your LLM provider API endpoint (e.g., OpenAI, local LLM, etc.)</p>
+                <p><strong>LLM_API_KEY</strong>: Your API key</p>
+                <p><strong>LLM_MODEL_NAME</strong>: Model name (optional, defaults to gpt-3.5-turbo)</p>
+            </section>
+        </main>
+    </div>
+    
+    <script src="{% static 'news/script.js' %}"></script>
+</body>
+</html>
